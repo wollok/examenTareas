@@ -1,6 +1,6 @@
 # Proyectos - Ejemplo integrador
 
-<img src="img/project-schedule.png" height="200" width="200">
+<img src="img/project.png" height="200" width="200">
 
 Es un ejemplo del ejercicio integrador de Proyectos.
 Todavía le falta generar un fixture e implementar casos de prueba.
