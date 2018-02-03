@@ -1,16 +1,10 @@
 class Proyecto {
 	const tareas = [ ]
-	var presupuestoInicial = 1000
+	var property presupuestoInicial = 1000
 
 	method agregarTarea(_tarea) {
 		tareas.add(_tarea)
 	}
-
-	method presupuestoInicial(_presupuesto) {
-		presupuestoInicial = _presupuesto
-	}
-
-	method presupuestoInicial() = presupuestoInicial
 
 	// Punto 1
 	method provinciasConActividad(unaFecha, otraFecha) =
@@ -25,7 +19,7 @@ class Proyecto {
 		self.superficieTotal() / self.cantidadDeTareas()
 
 	method superficieTotal() = 
-		tareas.fold(0, { acum , tarea => acum + tarea.superficie() })
+		tareas.sum { tarea => tarea.superficie() }
 
 	method cantidadDeTareas() = tareas.size()
 
@@ -34,7 +28,7 @@ class Proyecto {
 		presupuestoInicial - self.montoDeTareasA(unaFecha)
 
 	method montoDeTareasA(unaFecha) =
-		self.tareasHasta(unaFecha).fold(0, { acum , tarea => acum +	tarea.monto() })
+		self.tareasHasta(unaFecha).sum { tarea => tarea.monto() }
 
 	method tareasHasta(unaFecha) =
 		self.tareasEntre(self.fechaInicio(), unaFecha)
@@ -47,22 +41,10 @@ class Proyecto {
 }
 
 class Tarea {
-	var fecha
-	var lugar
-	var tareasPrecedentes = [ ]
-	var proyecto
-
-	method fecha(_fecha) {
-		fecha = _fecha
-	}
-
-	method lugar(_lugar) {
-		lugar = _lugar
-	}
-
-	method proyecto(_unProyecto) {
-		proyecto = _unProyecto
-	}
+	var property fecha = new Date()
+	var property lugar
+	const tareasPrecedentes = [ ]
+	var property proyecto
 
 	method fechaEntre(unaFecha, otraFecha) =
 		fecha.between(unaFecha, otraFecha)
@@ -111,7 +93,7 @@ class TareaProduccion inherits Tarea {
 }
 
 class TareaRecaudacion inherits Tarea {
-	var ingreso
+	var property ingreso
 
 	constructor(_ingreso) {
 		ingreso = _ingreso
@@ -129,14 +111,7 @@ class Oficina {
 }
 
 class Ciudad {
-	var superficie
-
-	method superficie(_superficie) {
-		superficie = _superficie
-	}
-
-	// Punto 2	
-	method superficie() = superficie
+	var property superficie
 }
 
 class ZonaRural {
@@ -147,11 +122,10 @@ class ZonaRural {
 }
 
 class Servicio {
-	const costo
+	const property costo
 
 	constructor(_costo) {
 		costo = _costo
 	}
 
-	method costo() = costo
 }
