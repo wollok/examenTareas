@@ -1,4 +1,7 @@
 # Proyectos - Ejemplo integrador
+ 
+[![Build Status](https://travis-ci.org/wollok/examenTareas.svg?branch=master)](https://travis-ci.org/wollok/examenTareas)
+
 
 <img src="img/project.png" height="200" width="200">
 
