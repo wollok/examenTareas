@@ -2,14 +2,13 @@ class Proyecto {
 	const tareas = [ ]
 	var property presupuestoInicial = 1000
 
-	method agregarTarea(_tarea) {
-		tareas.add(_tarea)
+	method agregarTarea(tarea) {
+		tareas.add(tarea)
 	}
 
 	// Punto 1
 	method provinciasConActividad(unaFecha, otraFecha) =
-			self.tareasEntre(unaFecha, otraFecha).map({ tarea => tarea.provincia()
-		})
+			self.tareasEntre(unaFecha, otraFecha).map{ tarea => tarea.provincia()}.asSet()
 
 	method tareasEntre(unaFecha, otraFecha) = 
 		tareas.filter({ tarea => tarea.fechaEntre(unaFecha, otraFecha) })
@@ -34,7 +33,7 @@ class Proyecto {
 		self.tareasEntre(self.fechaInicio(), unaFecha)
 
 	method fechaInicio() = 
-		tareas.sortBy({ t1 , t2 => t1.fecha() <	t2.fecha() }).first()
+		tareas.min{ t=> t.fecha()} 
 
 	method esCoherente() = 
 		tareas.all({ tarea => tarea.sePuedeHacerPara(self) })
@@ -44,7 +43,6 @@ class Tarea {
 	var property fecha = new Date()
 	var property lugar
 	const tareasPrecedentes = [ ]
-	var property proyecto
 
 	method fechaEntre(unaFecha, otraFecha) =
 		fecha.between(unaFecha, otraFecha)
@@ -56,7 +54,7 @@ class Tarea {
 	method superficie() = lugar.superficie()
 
 	// Punto 4
-	method sePuedeHacerPara(_unProyecto) = 
+	method sePuedeHacerPara(unProyecto) = 
 		tareasPrecedentes.all({ tarea => tarea.sePuedeCumplirAntesDe(fecha) })
 
 	method sePuedeCumplirAntesDe(unaFecha) = fecha < unaFecha
@@ -66,38 +64,32 @@ class Tarea {
 		if (!self.tieneTareasPrecedentes()) {
 			return 0
 		}
-		const ultimaTarea = self.tareasPrecedentesPorFecha().first()
+		const ultimaTarea = tareasPrecedentes.max{t=> t.fecha()}
 		return fecha - ultimaTarea.fecha()
 	}
 
 	method tieneTareasPrecedentes() =
-		!tareasPrecedentes.isEmpty()	
-	
-	method tareasPrecedentesPorFecha() =
-		tareasPrecedentes.sort({ t1 , t2 => t1.fecha() > t2.fecha() })
+		!tareasPrecedentes.isEmpty()
+
 }
 
 class TareaProduccion inherits Tarea {
 	const servicios = [ ]
 
-	method agregarServicio(_servicio) {
-		servicios.add(_servicio)
+	method agregarServicio(servicio) {
+		servicios.add(servicio)
 	}
 
 	method monto() = 
-		servicios.fold(0, { total , servicio => total + servicio.costo() })
+		servicios.sum{servicio => servicio.costo() }
 
 	// Punto 4
-	override method sePuedeHacerPara(_unProyecto) = 
-		super(_unProyecto) && (_unProyecto.saldoA(fecha) > 0)
+	override method sePuedeHacerPara(unProyecto) = 
+		super(unProyecto) && (unProyecto.saldoA(fecha) > 0)
 }
 
 class TareaRecaudacion inherits Tarea {
 	var property ingreso
-
-	constructor(_ingreso) {
-		ingreso = _ingreso
-	}
 
 	method monto() = ingreso * ( - 1 )
 }
@@ -107,25 +99,24 @@ class TareaReunion inherits Tarea {
 }
 
 class Oficina {
+	var property ciudad
 	method superficie() = 10
+	method provincia() = ciudad.provincia()
 }
 
 class Ciudad {
+	var property provincia
 	var property superficie
 }
 
 class ZonaRural {
 	var ancho = 10
 	var largo = 10
+	var property provincia
 
 	method superficie() = ancho * largo
 }
 
 class Servicio {
 	const property costo
-
-	constructor(_costo) {
-		costo = _costo
-	}
-
 }
