@@ -33,7 +33,7 @@ class Proyecto {
 		self.tareasEntre(self.fechaInicio(), unaFecha)
 
 	method fechaInicio() = 
-		tareas.min{ t=> t.fecha()} 
+		tareas.min{ t=> t.fecha()}.fecha() 
 
 	method esCoherente() = 
 		tareas.all({ tarea => tarea.sePuedeHacerPara(self) })
