@@ -1,6 +1,6 @@
 # Proyectos - Ejemplo integrador
  
-[![Build Status](https://travis-ci.org/wollok/examenTareas.svg?branch=master)](https://travis-ci.org/wollok/examenTareas)
+[![Build Status](https://github.com/wollok/examenTareas/actions/workflows/ci.yml/badge.svg)](https://github.com/wollok/examenTareas/actions/workflows/ci.yml)
 
 
 <img src="img/project.png" height="200" width="200">
